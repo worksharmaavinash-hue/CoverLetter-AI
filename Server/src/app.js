@@ -8,8 +8,10 @@ import jobRouter from './routes/job.routes.js';
 const app = express()
 connectToDb()
 
+const allowedOrigin = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : 'http://localhost:5173';
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: allowedOrigin,
     credentials: true
 }))
 
