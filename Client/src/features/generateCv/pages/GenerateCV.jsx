@@ -18,10 +18,7 @@ const savedHistory = [
 
 const GenerateCV = () => {
     const navigate = useNavigate()
-    const savedUser = localStorage.getItem('cvMakerUser')
-    const user = savedUser ? JSON.parse(savedUser) : null
     const [resumeFile, setResumeFile] = useState(null)
-    const [resumeText, setResumeText] = useState('')
     const [jobUrl, setJobUrl] = useState('')
     const [jobDescription, setJobDescription] = useState('')
     const [coverLetter, setCoverLetter] = useState('')
@@ -46,7 +43,7 @@ const GenerateCV = () => {
 
             const result = await generateCoverLetter({
                 resumeFile,
-                resumeText: resumeText.trim(),
+                resumeText: '',
                 jobDescription: jobData.fullJobDescription
             })
 

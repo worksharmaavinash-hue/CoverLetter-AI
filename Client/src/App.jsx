@@ -1,53 +1,40 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
-import AuthPage from './features/auth/pages/AuthPage'
-import GenerateCV from './features/generateCv/pages/GenerateCV'
+import { createBrowserRouter, RouterProvider } from 'react-router'
 import LandingPage from './features/landing/pages/LandingPage'
-
-function ProtectedRoute({ children }) {
-    const savedUser = localStorage.getItem('cvMakerUser')
-
-    return savedUser ? children : <Navigate to="/login" replace />
-}
-
-function GuestRoute({ children }) {
-    const savedUser = localStorage.getItem('cvMakerUser')
-
-    return savedUser ? <Navigate to="/generate" replace /> : children
-}
+import GenerateCV from './features/generateCv/pages/GenerateCV'
+import AppLayout from './components/AppLayout'
+import Login from './features/auth/pages/Login'
+import Register from './features/auth/pages/Register'
 
 const App = () => {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route
-                    path="/login"
-                    element={
-                        <GuestRoute>
-                            <AuthPage initialMode="login" />
-                        </GuestRoute>
-                    }
-                />
-                <Route
-                    path="/register"
-                    element={
-                        <GuestRoute>
-                            <AuthPage initialMode="register" />
-                        </GuestRoute>
-                    }
-                />
-                <Route
-                    path="/generate"
-                    element={
-                        <ProtectedRoute>
-                            <GenerateCV />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route path="*" element={<Navigate to="/generate" replace />} />
-            </Routes>
-        </BrowserRouter>
-    )
+
+    const router = createBrowserRouter([
+        {
+            path: '/',
+            element: <AppLayout />,
+            children: [
+                {
+                    index: true,
+                    element: <LandingPage />
+                },
+                {
+                    path: '/login',
+                    element: <Login />
+                },
+                {
+                    path: '/register',
+                    element: <Register />
+                },
+                {
+                    path: '/generate',
+                    element: <GenerateCV />
+                }
+            ]
+        }
+    ])
+
+  return (
+    <RouterProvider router={router} />
+  )
 }
 
-export default App  
+export default App

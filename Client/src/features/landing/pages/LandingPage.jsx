@@ -3,19 +3,6 @@ import { Link } from 'react-router'
 function LandingPage() {
     return (
         <main className="landing-page">
-            <nav className="site-nav">
-                <Link className="brand" to="/">CoverAI</Link>
-                <div className="nav-links">
-                    <a href="#features">Features</a>
-                    <a href="#process">How it works</a>
-                    <a href="#pricing">Pricing</a>
-                </div>
-                <div className="nav-actions">
-                    <Link to="/login">Log In</Link>
-                    <Link className="nav-cta" to="/register">Get Started</Link>
-                </div>
-            </nav>
-
             <section className="hero-section">
                 <div className="hero-copy">
                     <p className="pill">New: GPT-powered resume analysis</p>
@@ -118,45 +105,6 @@ function LandingPage() {
                 </div>
             </section>
 
-            <section className="pricing-section" id="pricing">
-                <div className="section-heading">
-                    <h2>Simple, Transparent Pricing</h2>
-                    <p>Start free while you build the rest of your application flow.</p>
-                </div>
-                <div className="pricing-grid">
-                    <article className="price-card">
-                        <p>Free</p>
-                        <h3>$0<span>/mo</span></h3>
-                        <ul>
-                            <li>1 cover letter per month</li>
-                            <li>Basic AI analysis</li>
-                            <li>Standard templates</li>
-                        </ul>
-                        <Link to="/register">Start Free</Link>
-                    </article>
-                    <article className="price-card featured">
-                        <p>Pro</p>
-                        <h3>$12<span>/mo</span></h3>
-                        <ul>
-                            <li>Unlimited cover letters</li>
-                            <li>Advanced job matching</li>
-                            <li>Resume PDF and image upload</li>
-                        </ul>
-                        <Link to="/register">Upgrade to Pro</Link>
-                    </article>
-                    <article className="price-card">
-                        <p>Team</p>
-                        <h3>$49<span>/mo</span></h3>
-                        <ul>
-                            <li>Up to 5 users</li>
-                            <li>Shared resume review tools</li>
-                            <li>Priority support</li>
-                        </ul>
-                        <Link to="/register">Contact Sales</Link>
-                    </article>
-                </div>
-            </section>
-
             <footer className="site-footer">
                 <div>
                     <Link className="brand" to="/">CoverAI</Link>
@@ -165,7 +113,6 @@ function LandingPage() {
                 <div>
                     <strong>Product</strong>
                     <a href="#features">Features</a>
-                    <a href="#pricing">Pricing</a>
                 </div>
                 <div>
                     <strong>Company</strong>
