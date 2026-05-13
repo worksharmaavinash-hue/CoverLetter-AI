@@ -8,10 +8,22 @@ import jobRouter from './routes/job.routes.js';
 const app = express()
 connectToDb()
 
-const allowedOrigin = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : 'http://localhost:5173';
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://cover-letter-ai-silk.vercel.app',
+    process.env.CLIENT_URL?.replace(/\/$/, '')
+].filter(Boolean);
 
 app.use(cors({
-    origin: allowedOrigin,
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     credentials: true
 }))
 
