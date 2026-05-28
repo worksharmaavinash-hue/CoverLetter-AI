@@ -4,6 +4,7 @@ import GenerateCV from './features/generateCv/pages/GenerateCV'
 import AppLayout from './components/AppLayout'
 import Login from './features/auth/pages/Login'
 import Register from './features/auth/pages/Register'
+import ProtectedRoute from './components/ProtectedRoute'
 
 const App = () => {
 
@@ -26,11 +27,12 @@ const App = () => {
                 },
                 {
                     path: '/generate',
-                    element: <GenerateCV />
+                    element: <ProtectedRoute><GenerateCV /></ProtectedRoute>
                 }
             ]
         }
     ])
+
 
   return (
     <RouterProvider router={router} />
