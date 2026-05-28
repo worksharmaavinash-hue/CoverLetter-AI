@@ -22,7 +22,6 @@ const useAuth = () => {
         try {
             const data = await loginUser({ email, password })
             setUser(data.user)
-            localStorage.setItem('cvMakerUser', JSON.stringify(data.user))
             return data
         } catch (err) {
             const message = getAuthErrorMessage(err)
@@ -40,7 +39,6 @@ const useAuth = () => {
         try {
             const data = await registerUser({ username, email, password })
             setUser(data.user)
-            localStorage.setItem('cvMakerUser', JSON.stringify(data.user))
             return data
         } catch (err) {
             const message = getAuthErrorMessage(err)
@@ -58,7 +56,6 @@ const useAuth = () => {
         try {
             await logoutUser()
         } finally {
-            localStorage.removeItem('cvMakerUser')
             setUser(null)
             setLoading(false)
         }

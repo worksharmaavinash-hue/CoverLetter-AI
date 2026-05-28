@@ -5,7 +5,6 @@ function LandingPage() {
         <main className="landing-page">
             <section className="hero-section">
                 <div className="hero-copy">
-                    <p className="pill">New: GPT-powered resume analysis</p>
                     <h1>
                         Land Interviews Faster with <span>AI-Powered</span> Cover Letters
                     </h1>

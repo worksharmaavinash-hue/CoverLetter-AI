@@ -108,3 +108,24 @@ export async function logoutController(req, res) {
         message: "User logged out successfully"
     })
 }
+
+export async function getMeController(req, res) {
+    const token = req.cookies?.token
+
+    if (!token) {
+        return res.status(401).json({ message: "Not authenticated" })
+    }
+
+    try {
+        const decoded = jwt.verify(token, getJwtSecret())
+        const user = await userModel.findById(decoded.id).select('-password')
+
+        if (!user) {
+            return res.status(401).json({ message: "User not found" })
+        }
+
+        res.status(200).json({ user: sanitizeUser(user) })
+    } catch (err) {
+        res.status(401).json({ message: "Invalid token" })
+    }
+}

@@ -18,7 +18,7 @@ export async function extractJobDetails({ jobUrl, jobDescription }) {
     return res.data
 }
 
-export async function generateCoverLetter({ resumeFile, resumeText, jobDescription }) {
+export async function generateCoverLetter({ resumeFile, resumeText, jobDescription, companyName }) {
     const formData = new FormData()
 
     if(resumeFile){
@@ -30,6 +30,10 @@ export async function generateCoverLetter({ resumeFile, resumeText, jobDescripti
     }
 
     formData.append('jobDescription', jobDescription)
+
+    if(companyName){
+        formData.append('companyName', companyName)
+    }
 
     const res = await api.post('/api/ai/generate', formData)
 

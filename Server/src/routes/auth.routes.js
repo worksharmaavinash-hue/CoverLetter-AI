@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginController, logoutController, registerController } from "../controllers/auth.controller.js";
+import { getMeController, loginController, logoutController, registerController } from "../controllers/auth.controller.js";
 import { registerValidation } from "../validation/auth.validation.js";
 
 const authRouter = Router()
@@ -7,6 +7,6 @@ const authRouter = Router()
 authRouter.post("/register", registerValidation, registerController)
 authRouter.post("/login", loginController)
 authRouter.post("/logout", logoutController)
-// authRouter.post("/getme")
+authRouter.get("/getme", getMeController)
 
 export default authRouter;

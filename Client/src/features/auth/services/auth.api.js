@@ -33,3 +33,9 @@ export async function logoutUser() {
 
     return res.data
 }
+
+export async function getMe() {
+    const res = await api.get('/api/auth/getme')
+
+    return res.data
+}
