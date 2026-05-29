@@ -727,9 +727,10 @@ textarea {
     border: 1px solid rgba(248, 113, 113, 0.28);
     border-radius: 10px;
     background: rgba(127, 29, 29, 0.24);
-    color: #fecaca;
+    color: #bf3939;
     padding: 12px 13px;
     font-size: 0.92rem;
+    font-weight: 500;
 }
 
 .generator-page {

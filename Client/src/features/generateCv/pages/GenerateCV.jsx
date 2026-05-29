@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { logoutUser } from '../../auth/services/auth.api'
 import { extractJobDetails, generateCoverLetter } from '../services/generate.api'
-import { jsPDF } from 'jspdf'
 
 const savedHistory = [
     {
@@ -69,37 +68,41 @@ const GenerateCV = () => {
         setShowFallbackInput(false)
     }
 
-    const handleDownloadPDF = () => {
-        const doc = new jsPDF()
-        const margin = 20
-        const maxWidth = doc.internal.pageSize.getWidth() - 2 * margin
-        const pageHeight = doc.internal.pageSize.getHeight()
-        const lineHeight = 7
+    const handleDownloadWord = () => {
+        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+            "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+            "xmlns='http://www.w3.org/TR/REC-html40'>" +
+            "<head><title>Cover Letter</title>" +
+            "<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View></w:WordDocument></xml><![endif]-->" +
+            "<style>" +
+            "body { font-family: 'Calibri', 'Arial', sans-serif; font-size: 12pt; line-height: 1.5; margin: 0.5in; }" +
+            "p { margin: 0 0 10pt 0; text-align: justify; }" +
+            "</style>" +
+            "</head><body>";
+        const footer = "</body></html>";
 
-        // Add a header
-        doc.setFontSize(18)
-        doc.setFont('helvetica', 'bold')
-        doc.text('Cover Letter', margin, margin + 10)
+        // Convert the cover letter content (preserving line breaks) into HTML paragraphs
+        const paragraphs = coverLetter
+            .split('\n')
+            .map(line => line.trim() === '' ? '<p>&nbsp;</p>' : `<p>${line}</p>`)
+            .join('');
 
-        // Add the cover letter body
-        doc.setFontSize(11)
-        doc.setFont('helvetica', 'normal')
-        const lines = doc.splitTextToSize(coverLetter, maxWidth)
-        let cursorY = margin + (extractedJob?.companyName ? 32 : 22)
+        const htmlContent = header + paragraphs + footer;
 
-        for (const line of lines) {
-            if (cursorY + lineHeight > pageHeight - margin) {
-                doc.addPage()
-                cursorY = margin
-            }
-            doc.text(line, margin, cursorY)
-            cursorY += lineHeight
-        }
+        const blob = new Blob(['\ufeff' + htmlContent], {
+            type: 'application/msword'
+        });
 
-        const fileName = extractedJob?.companyName
-            ? `${extractedJob.companyName}-cover-letter.pdf`
-            : 'cover-letter.pdf'
-        doc.save(fileName)
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = extractedJob?.companyName
+            ? `${extractedJob.companyName}-cover-letter.doc`
+            : 'cover-letter.doc';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     const handleLogout = async () => {
@@ -131,9 +134,9 @@ const GenerateCV = () => {
                                 <label className="upload-btn-outline">
                                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
                                     Upload CV
-                                    <input 
-                                        type="file" 
-                                        accept=".pdf,.doc,.docx" 
+                                    <input
+                                        type="file"
+                                        accept=".pdf,.doc,.docx"
                                         onChange={(event) => setResumeFile(event.target.files?.[0] || null)}
                                         style={{ display: 'none' }}
                                     />
@@ -152,7 +155,7 @@ const GenerateCV = () => {
                         </div>
 
                         {showFallbackInput && (
-                            <div className="job-inputs-section" style={{marginTop: '24px'}}>
+                            <div className="cv-input-box" style={{ marginTop: '24px', marginBottom: '0' }}>
                                 <textarea
                                     className="cv-textarea"
                                     value={jobDescription}
@@ -167,7 +170,7 @@ const GenerateCV = () => {
 
                         <div className="submit-row">
                             <button className="primary-button outline-submit" type="submit" disabled={loading}>
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '8px'}}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
                                 {loading ? 'Analyzing...' : 'Generate cover letter'}
                             </button>
                         </div>
@@ -178,46 +181,22 @@ const GenerateCV = () => {
 
             {(extractedJob || coverLetter) && (
                 <section className="generator-results">
-                    {extractedJob && (
-                        <div className="result-panel">
-                            <h2>Extracted Job</h2>
-                            <dl className="job-summary">
-                                <div>
-                                    <dt>Company</dt>
-                                    <dd>{extractedJob.companyName}</dd>
-                                </div>
-                                <div>
-                                    <dt>Role</dt>
-                                    <dd>{extractedJob.jobTitle}</dd>
-                                </div>
-                                <div>
-                                    <dt>Location</dt>
-                                    <dd>{extractedJob.location}</dd>
-                                </div>
-                                <div>
-                                    <dt>Salary</dt>
-                                    <dd>{extractedJob.salary}</dd>
-                                </div>
-                            </dl>
-                        </div>
-                    )}
-
                     {coverLetter && (
                         <div className="result-panel letter-panel">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                                 <h2 className='font-semibold text-lg'>Your Cover Letter:</h2>
-                                <button 
-                                    type="button" 
-                                    className="primary-button outline-submit" 
-                                    onClick={handleDownloadPDF}
+                                <button
+                                    type="button"
+                                    className="primary-button outline-submit"
+                                    onClick={handleDownloadWord}
                                     style={{ padding: '8px 16px', fontSize: '14px' }}
                                 >
-                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '6px'}}>
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                         <polyline points="7 10 12 15 17 10" />
                                         <line x1="12" y1="15" x2="12" y2="3" />
                                     </svg>
-                                    Download PDF
+                                    Download Word
                                 </button>
                             </div>
                             <pre>{coverLetter}</pre>
