@@ -44,9 +44,11 @@ export async function registerController(req, res) {
         email: user.email
     }, getJwtSecret(), { expiresIn: '7d'})
 
+    const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
         httpOnly: true,
-        sameSite: 'lax',
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000
     })
     
@@ -86,9 +88,11 @@ export async function loginController(req, res) {
         email: user.email
     }, getJwtSecret(), { expiresIn: '7d'})
 
+    const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
         httpOnly: true,
-        sameSite: 'lax',
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000
     })
 
@@ -99,9 +103,11 @@ export async function loginController(req, res) {
 }
 
 export async function logoutController(req, res) {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.clearCookie('token', {
         httpOnly: true,
-        sameSite: 'lax'
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax'
     })
 
     res.status(200).json({
