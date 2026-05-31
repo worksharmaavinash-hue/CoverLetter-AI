@@ -739,7 +739,7 @@ p {
     margin: 0 0 12px !important;
     color: #ffffff !important;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(1.6rem, 2.6vw, 2.1rem) !important;
+    font-size: clamp(1.8rem, 2.8vw, 3.5rem) !important;
     font-weight: 700 !important;
     line-height: 1.25 !important;
     letter-spacing: -0.015em !important;

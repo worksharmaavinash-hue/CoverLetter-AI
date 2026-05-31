@@ -3,7 +3,10 @@ import AuthContextValue from '../AuthContextValue'
 import { loginUser, logoutUser, registerUser } from '../services/auth.api'
 
 const getAuthErrorMessage = (err) => {
-    return err.response?.data?.message || err.message || 'Authentication failed'
+    if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+        return err.response.data.errors.map(error => error.msg).join(', ')
+    }
+    return err.response?.data?.message || err.response?.data?.error || err.message || 'Authentication failed'
 }
 
 const useAuth = () => {
