@@ -47,7 +47,7 @@ const Login = () => {
 
                     <div className="brand-pitch">
                         <h2>Land the interview with the perfect cover letter.</h2>
-                        <p>Drop in your resume and a job link — we tailor a professional cover letter in seconds.</p>
+                        <p>Drop in your resume and a job link - we tailor a professional cover letter in seconds.</p>
                     </div>
 
                     <div className="auth-visual-preview">
@@ -113,7 +113,7 @@ const Login = () => {
                                 type="password"
                                 value={form.password}
                                 onChange={handleChange}
-                                placeholder="Minimum 6 characters"
+                                placeholder="Minimum 8 characters"
                                 autoComplete="current-password"
                                 required
                             />

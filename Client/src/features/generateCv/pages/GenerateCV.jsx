@@ -154,7 +154,6 @@ const GenerateCV = () => {
                     <div className="cv-input-card">
                         <div className="cv-input-header">
                             <h2>Generate your cover letter</h2>
-                            <span className="tries-badge">Beta</span>
                         </div>
 
                         <div className="cv-input-fields">

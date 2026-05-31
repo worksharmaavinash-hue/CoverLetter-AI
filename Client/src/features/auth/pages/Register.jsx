@@ -133,9 +133,9 @@ const Register = () => {
                                 type="password"
                                 value={form.password}
                                 onChange={handleChange}
-                                placeholder="Minimum 6 characters"
+                                placeholder="Minimum 8 characters"
                                 autoComplete="new-password"
-                                minLength={6}
+                                minLength={8}
                                 required
                             />
                         </div>
