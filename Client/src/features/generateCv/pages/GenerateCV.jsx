@@ -204,7 +204,7 @@ const GenerateCV = () => {
                                 </div>
                             )}
 
-                            <div className="url-input-container">
+                            <div className={`url-input-container ${jobDescription ? 'input-inactive' : ''}`}>
                                 <div className="input-icon">
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
@@ -221,17 +221,21 @@ const GenerateCV = () => {
                             </div>
                         </div>
 
-                        {showFallbackInput && (
-                            <div className="fallback-input-box">
-                                <textarea
-                                    className="cv-textarea"
-                                    value={jobDescription}
-                                    onChange={(event) => setJobDescription(event.target.value)}
-                                    placeholder="Scraping blocked. Paste the full job description here…"
-                                    rows={4}
-                                />
-                            </div>
-                        )}
+                        <div className="or-divider">
+                            <span className="or-line"></span>
+                            <span className="or-text">OR</span>
+                            <span className="or-line"></span>
+                        </div>
+
+                        <div className={`fallback-input-box ${jobUrl ? 'input-inactive' : ''}`}>
+                            <textarea
+                                className="cv-textarea"
+                                value={jobDescription}
+                                onChange={(event) => setJobDescription(event.target.value)}
+                                placeholder="Paste the full job description here…"
+                                rows={4}
+                            />
+                        </div>
 
                         {error && <p className="form-error">{error}</p>}
 
